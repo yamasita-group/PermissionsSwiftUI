@@ -8,9 +8,14 @@
 import Foundation
 
 extension String {
-    // https://stackoverflow.com/questions/25081757/whats-nslocalizedstring-equivalent-in-swift
-    /// Swifty wrapper for accessing NSLocalizedString with only key parameter
     var localized: String {
+        // 1. 先尝试读取 App (Bundle.main) 的翻译
+        let appValue = NSLocalizedString(self, bundle: .main, comment: "")
+        if appValue != self {
+            return appValue
+        }
+
+        // 2. 没有 → 再从 Swift Package 自己的资源取
         return NSLocalizedString(self, tableName: nil, bundle: .module, value: "", comment: "")
     }
 }
